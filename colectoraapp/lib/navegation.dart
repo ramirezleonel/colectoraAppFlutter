@@ -1,6 +1,6 @@
 import 'package:colectoraapp/Perfil.dart';
 import 'package:colectoraapp/RetiroMercaderia.dart';
-import 'package:colectoraapp/ingresoMercaderia.dart';
+import 'package:colectoraapp/screens/ingresoMercaderia.dart';
 import 'package:flutter/material.dart';
 
 class Navegation extends StatefulWidget{
