@@ -15,17 +15,22 @@ class IngresoMercaderia extends StatefulWidget{
 
 class _IngresoMercaderia extends State<IngresoMercaderia>{
 String codigoBarra = "";
+List<ProductoModel> productos = List<ProductoModel>();
 final TextEditingController textEditingController = new TextEditingController();
 
   void onChange(String val){
+
     if(val.length == 13){
       setState(() {
         codigoBarra = codigoBarra + val +"\n";
+        productos.add(ProductoModel(id: 1,nombre: "mayonesa",codigoBarra:codigoBarra.toString()));
         textEditingController.clear();
+        codigoBarra = "";
       });
     }
 
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +39,8 @@ final TextEditingController textEditingController = new TextEditingController();
       appBar:
       AppBar(
          title: Text("Ingreso de Mercaderia"),
-
     ),drawer: Drawer(),
       body: Container(
-
         padding: EdgeInsets.all(15.0),
         child: Column(
             children: <Widget>[
@@ -49,10 +52,14 @@ final TextEditingController textEditingController = new TextEditingController();
               ),
               Container(
                 child: Expanded(
-                 child: ListView(
-                    children: <Widget>[
-                      ProductoItem(),
-                    ],
+                 child: ListView.builder(
+                   itemCount: productos.length ,
+                   itemBuilder: (context,index){
+                     return ListTile(
+                       title: Text('${productos[index].codigoBarra}'),
+                       subtitle: Text('${productos[index].nombre}'),
+                     );
+                   }
                   ),
                 )
               ),

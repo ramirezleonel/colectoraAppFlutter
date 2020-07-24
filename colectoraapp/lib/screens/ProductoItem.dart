@@ -1,19 +1,17 @@
+import 'package:colectoraapp/Model/productoModel.dart';
 import 'package:flutter/material.dart';
 
 
 class ProductoItem extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-   return Container(
-     child: ListTile(
-       leading: CircleAvatar(
-         child: Text("L"),
-       ),
-         title: Text("Leonel Ramirez"),
-       subtitle: Text("Prueba"),
-     ),
-   );
+
+
+    @override
+    Widget build(BuildContext context) {
+      // TODO: implement build
+      return ListTile(
+        title: Text("hola"),
+        subtitle: Text("hola2"),
+      );
+    }
+
   }
-  
-}
