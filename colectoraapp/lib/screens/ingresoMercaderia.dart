@@ -26,11 +26,13 @@ Future<ProductoModel> fetchPost(String codBarra) async {
 
   if (response.statusCode == 200) {
     // Si la llamada al servidor fue exitosa, analiza el JSON
-  print(response.body);
+    productos.add(ProductoModel(id: 1,nombre: "mayonesa",codigoBarra:codBarra));
+
   } else {
     // Si la llamada no fue exitosa, lanza un error.
     throw Exception('Failed to load post');
   }
+  textEditingController.clear();
 }
 
 
@@ -38,12 +40,10 @@ Future<ProductoModel> fetchPost(String codBarra) async {
 
     if(val.length == 13){
       setState(() {
-        codigoBarra = codigoBarra + val +"\n";
-        productos.add(ProductoModel(id: 1,nombre: "mayonesa",codigoBarra:codigoBarra.toString()));
-        textEditingController.clear();
+        codigoBarra = val ;
         fetchPost(codigoBarra);
-        codigoBarra = "";
       });
+
     }
 
   }
@@ -66,6 +66,7 @@ Future<ProductoModel> fetchPost(String codBarra) async {
                 keyboardType: TextInputType.number,
                 onChanged: onChange,
                 controller: textEditingController,
+                autofocus: true,
               ),
               Container(
                 child: Expanded(
