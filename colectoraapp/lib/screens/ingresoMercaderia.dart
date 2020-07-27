@@ -10,9 +10,7 @@ class IngresoMercaderia extends StatefulWidget{
     // TODO: implement createState
     return _IngresoMercaderia();
   }
-
 }
-
 
 class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
@@ -34,9 +32,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     }
   }
 
-
   void onChange(String val){
-
     if(val.length == 13){
       setState(() {
         codigoBarra = val ;
@@ -85,7 +81,11 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                               return ListTile(
                                 title: Text('${listaProductos[index].nombre}'),
                                 subtitle: Text('${listaProductos[index].codigoBarra}'),
-
+                                trailing:
+                                IconButton(
+                                icon:new Icon(Icons.chevron_right),
+//                                  onPressed: ,
+                                ),
                               );
                             }
                         ),
