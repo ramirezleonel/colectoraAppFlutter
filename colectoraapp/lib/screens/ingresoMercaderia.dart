@@ -72,7 +72,16 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                         );
                       }
                       if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
-                          listaProductos.add(snapshot.data);
+                        bool encontrado = false;
+                          listaProductos.forEach((producto){
+                            if(producto.codigoBarra == snapshot.data.codigoBarra){
+                              encontrado = true;
+                              producto.cantidad += 1;
+                            }
+                          });
+                          if(encontrado ==false){
+                            listaProductos.add(snapshot.data);
+                          }
                       }
                       return Expanded(
                         child: ListView.builder(
@@ -81,11 +90,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                               return ListTile(
                                 title: Text('${listaProductos[index].nombre}'),
                                 subtitle: Text('${listaProductos[index].codigoBarra}'),
-                                trailing:
-                                IconButton(
-                                icon:new Icon(Icons.chevron_right),
-//                                  onPressed: ,
-                                ),
+                                trailing: Text('${listaProductos[index].cantidad}')
                               );
                             }
                         ),
