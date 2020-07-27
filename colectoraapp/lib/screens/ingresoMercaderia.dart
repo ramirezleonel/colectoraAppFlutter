@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:colectoraapp/Model/productoModel.dart';
-import 'package:colectoraapp/screens/ProductoItem.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +17,7 @@ class IngresoMercaderia extends StatefulWidget{
 class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
   Future <ProductoModel> productos ;
+  List <ProductoModel> listaProductos;
   final TextEditingController textEditingController = new TextEditingController();
 
 
@@ -34,7 +34,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       // Si la llamada no fue exitosa, lanza un error.
       throw Exception('Error no se encontró el producto');
     }
-    textEditingController.clear();
+
   }
 
 
@@ -44,6 +44,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       setState(() {
         codigoBarra = val ;
         productos =  fetchProducto(codigoBarra);
+        textEditingController.clear();
       });
 
     }
@@ -92,6 +93,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                       }
 
                       return Container(
+                          margin: EdgeInsets.all(15.0),
                           child:Center(
                               child: Text("No existen datos")
                           )
