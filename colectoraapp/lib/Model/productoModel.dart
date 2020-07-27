@@ -5,6 +5,7 @@ class ProductoModel {
   final String nombre;
   final String codigoBarra;
   ProductoModel({this.id,this.nombre,this.codigoBarra});
+
   factory ProductoModel.fromJson(Map<String, dynamic> json) {
     return ProductoModel(
       id: json['idArticulo'],

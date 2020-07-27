@@ -17,10 +17,8 @@ class IngresoMercaderia extends StatefulWidget{
 class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
   Future <ProductoModel> productos ;
-  List <ProductoModel> listaProductos;
+  List <ProductoModel> listaProductos = new  List<ProductoModel>();
   final TextEditingController textEditingController = new TextEditingController();
-
-
 
   Future<ProductoModel> fetchProducto(String codBarra) async {
     final response =
@@ -28,13 +26,12 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
 
     if (response.statusCode == 200 ) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
-      print(response.body);
+
       return ProductoModel.fromJson(json.decode(response.body));
     } else {
       // Si la llamada no fue exitosa, lanza un error.
       throw Exception('Error no se encontró el producto');
     }
-
   }
 
 
@@ -46,11 +43,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         productos =  fetchProducto(codigoBarra);
         textEditingController.clear();
       });
-
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,27 +70,25 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                     future: productos,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                      if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
-                        return Expanded(
-                          child: ListView.builder(
-                              itemCount: 1 ,
-                              itemBuilder: (context,index){
-                                return ListTile(
-                                  title: Text('${snapshot.data.nombre}'),
-                                  subtitle: Text('${snapshot.data.codigoBarra}'),
-                                );
-                              }
-                          ),
+                        return Container(
+                          margin: EdgeInsets.all(20.0),
+                          child:Center(child: CircularProgressIndicator())
                         );
                       }
+                      if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
+                          listaProductos.add(snapshot.data);
+                      }
+                      return Expanded(
+                        child: ListView.builder(
+                            itemCount: listaProductos.length ,
+                            itemBuilder: (context,index){
+                              return ListTile(
+                                title: Text('${listaProductos[index].nombre}'),
+                                subtitle: Text('${listaProductos[index].codigoBarra}'),
 
-                      return Container(
-                          margin: EdgeInsets.all(15.0),
-                          child:Center(
-                              child: Text("No existen datos")
-                          )
+                              );
+                            }
+                        ),
                       );
                     }
                 )
