@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:colectoraapp/Model/productoModel.dart';
 import 'package:colectoraapp/screens/ProductoItem.dart';
 import 'package:flutter/material.dart';
@@ -15,22 +17,22 @@ class IngresoMercaderia extends StatefulWidget{
 
 class _IngresoMercaderia extends State<IngresoMercaderia>{
 String codigoBarra = "";
-List<ProductoModel> productos = List<ProductoModel>();
+Future <ProductoModel> productos ;
 final TextEditingController textEditingController = new TextEditingController();
 
 
 
-Future<ProductoModel> fetchPost(String codBarra) async {
+Future<ProductoModel> fetchProducto(String codBarra) async {
   final response =
   await http.get('http://192.168.0.247:9590/articulo/codbarra/${codBarra}');
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 200 ) {
     // Si la llamada al servidor fue exitosa, analiza el JSON
-    productos.add(ProductoModel(id: 1,nombre: "mayonesa",codigoBarra:codBarra));
-
+    print(response.body);
+    return ProductoModel.fromJson(json.decode(response.body));
   } else {
     // Si la llamada no fue exitosa, lanza un error.
-    throw Exception('Failed to load post');
+    throw Exception('Error no se encontró el producto');
   }
   textEditingController.clear();
 }
@@ -41,7 +43,7 @@ Future<ProductoModel> fetchPost(String codBarra) async {
     if(val.length == 13){
       setState(() {
         codigoBarra = val ;
-        fetchPost(codigoBarra);
+        productos =  fetchProducto(codigoBarra);
       });
 
     }
@@ -69,17 +71,34 @@ Future<ProductoModel> fetchPost(String codBarra) async {
                 autofocus: true,
               ),
               Container(
-                child: Expanded(
-                 child: ListView.builder(
-                   itemCount: productos.length ,
-                   itemBuilder: (context,index){
-                     return ListTile(
-                       title: Text('${productos[index].codigoBarra}'),
-                       subtitle: Text('${productos[index].nombre}'),
-                     );
+               child: FutureBuilder<ProductoModel>(
+                   future: productos,
+                   builder: (context, snapshot) {
+                    if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                    }
+                    var data = snapshot.data;
+                    if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
+                      return Expanded(
+                        child: ListView.builder(
+                            itemCount: productos.length ,
+                            itemBuilder: (context,index){
+                              return ListTile(
+                                title: Text('${productos[index].codigoBarra}'),
+                                subtitle: Text('${productos[index].nombre}'),
+                              );
+                            }
+                        ),
+                      );
+                    }
+
+                    return Container(
+                        child:Center(
+                           child: Text("No existen datos")
+                        )
+                    );
                    }
-                  ),
-                )
+               )
               ),
           ],
         ),
