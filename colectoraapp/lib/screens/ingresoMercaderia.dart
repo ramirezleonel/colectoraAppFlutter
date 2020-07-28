@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:colectoraapp/Model/productoModel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -90,7 +91,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                               return ListTile(
                                 title: Text('${listaProductos[index].nombre}'),
                                 subtitle: Text('${listaProductos[index].codigoBarra}'),
-                                trailing: Text('${listaProductos[index].cantidad}')
+                                trailing: Text('${listaProductos[index].cantidad}'),
+                                  onTap: () { /* react to the tile being tapped */ }
                               );
                             }
                         ),
@@ -98,6 +100,18 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                     }
                 )
             ),
+            Container(
+
+              child: ButtonTheme(
+                minWidth: 300.0,
+                child: RaisedButton(
+                  onPressed: () {},
+                  child: Text("Guardar"),
+                  colorBrightness: Brightness.dark,
+                ),
+              )
+
+            )
           ],
         ),
       ),
