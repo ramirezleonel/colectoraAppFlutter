@@ -31,7 +31,7 @@ class Login extends StatelessWidget{
                   ),
                   child:  Column(
                     children: <Widget>[
-                      Icon(Icons.person,size: 70,),
+                      Icon(Icons.person,size: 100.0),
                       Padding(
                         padding:EdgeInsets.only(bottom: 30),
                       ),

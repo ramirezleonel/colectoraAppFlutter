@@ -9,9 +9,9 @@ class ListaDrawer extends StatelessWidget{
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
-          child: Image.asset('assets/logo_splash.png',width: 120),
+          child:  Icon( Icons.person , color: Colors.white, size: 100.0),
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: Colors.grey,
           ),
         ),
         ListTile(
