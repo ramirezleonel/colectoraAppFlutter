@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:colectoraapp/Model/productoModel.dart';
+import 'package:colectoraapp/Widget/ListaDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -50,7 +51,9 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       appBar:
       AppBar(
         title: Text("Ingreso de Mercaderia"),
-      ),drawer: Drawer(),
+      ),drawer: Drawer(
+        child: ListaDrawer(),
+    ),
       body: Container(
         padding: EdgeInsets.all(15.0),
         child: Column(
