@@ -1,4 +1,4 @@
-import 'package:colectoraapp/Model/productoModel.dart';
+import 'package:colectoraapp/Model/producto.dart';
 import 'package:colectoraapp/screens/ProductoItem.dart';
 import 'package:flutter/material.dart';
 
@@ -20,10 +20,10 @@ class _ListaProducto extends State<ListaProducto>{
   Widget build(BuildContext context) {
     // TODO: implement build
     mostrarLista() {
-      return <ProductoModel>[
-        ProductoModel(id: 1, nombre: "facundo"),
-        ProductoModel(id: 2, nombre: "facundo"),
-        ProductoModel(id: 3, nombre: "facundo"),
+      return <Producto>[
+        Producto(id: 1, nombre: "facundo"),
+        Producto(id: 2, nombre: "facundo"),
+        Producto(id: 3, nombre: "facundo"),
       ];
     }
 

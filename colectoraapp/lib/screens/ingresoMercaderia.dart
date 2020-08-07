@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:colectoraapp/Model/productoModel.dart';
+import 'package:colectoraapp/Model/producto.dart';
+import 'package:colectoraapp/Providers/ApiManager.dart';
 import 'package:colectoraapp/Widget/ListaDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,29 +17,22 @@ class IngresoMercaderia extends StatefulWidget{
 
 class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
-  Future <ProductoModel> productos ;
-  List <ProductoModel> listaProductos = new  List<ProductoModel>();
+  Future <Producto> productos ;
+  List <Producto> listaProductos = new  List<Producto>();
   final TextEditingController textEditingController = new TextEditingController();
+  final api = ApiManager();
 
-  Future<ProductoModel> fetchProducto(String codBarra) async {
-    final response =
-    await http.get('http://192.168.0.247:9590/articulo/codbarra/${codBarra}');
-
-    if (response.statusCode == 200 ) {
-      // Si la llamada al servidor fue exitosa, analiza el JSON
-
-      return ProductoModel.fromJson(json.decode(response.body));
-    } else {
-      // Si la llamada no fue exitosa, lanza un error.
-      throw Exception('Error no se encontró el producto');
-    }
+  Future<Producto> fetchProducto(String codBarra) async {
+      return await api.getProducto(codBarra);
   }
 
   void onChange(String val){
     if(val.length == 13){
       setState(() {
         codigoBarra = val ;
-        productos =  fetchProducto(codigoBarra);
+
+        productos = fetchProducto(codigoBarra);
+
         textEditingController.clear();
       });
     }
@@ -66,7 +60,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
               autofocus: true,
             ),
             Container(
-                child: FutureBuilder<ProductoModel>(
+                child: FutureBuilder<Producto>(
                     future: productos,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
@@ -121,5 +115,23 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-
+  Future<void> _showDialog(String texto) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(texto),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ProductoModel {
+class Producto {
   final int id;
   final String nombre;
   final String codigoBarra;
    int cantidad;
-  ProductoModel({this.id,this.nombre,this.codigoBarra,this.cantidad});
+  Producto({this.id,this.nombre,this.codigoBarra,this.cantidad});
 
-  factory ProductoModel.fromJson(Map<String, dynamic> json) {
-    return ProductoModel(
+  factory Producto.fromJson(Map<String, dynamic> json) {
+    return Producto(
       id: json['idArticulo'],
       nombre: json['nombre'],
-      codigoBarra: json['codigo'],
+      codigoBarra: json['codigoBarra'],
       cantidad: 1,
     );
   }
