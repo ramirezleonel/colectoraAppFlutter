@@ -16,4 +16,13 @@ class ApiManager {
     final producto = Producto.fromJson(decodedResponse);
     return producto;
   }
+  Future<String> postIngreso(Map <String,dynamic> ingreso) async {
+    final jsonIngreso = json.encode(ingreso);
+    final response = await http.post(
+      _url + '/stocks/',
+      body: jsonIngreso,
+    );
+
+    return response.body;
+  }
 }
