@@ -25,12 +25,42 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   final TextEditingController textEditingController = new TextEditingController();
   final api = ApiManager();
 
-  Future<Producto> fetchProducto(String codBarra) async {
-      return await api.getProducto(codBarra);
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      key:scaffoldKey,
+      appBar:AppBar(
+        title: Text("Ingreso de Mercaderia"),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.remove), onPressed: (){})
+        ],
+      ),
+      drawer: Drawer(
+        child: ListaDrawer(),
+    ),
+      body: Container(
+        padding: EdgeInsets.all(15.0),
+        child: Column(
+          children: <Widget>[
+           _inputCodigoBarra(),
+            _listaProductos(),
+            _botonGuardarIngreso()
+          ],
+        ),
+      ),
+    );
   }
 
-  Future<int> fetchGuardarIngreso() async {
-    return await api.postIngreso(listaProductos);
+
+  Widget _inputCodigoBarra(){
+    return TextField(
+      decoration: new InputDecoration(labelText: "Codigo de Barra"),
+      keyboardType: TextInputType.number,
+      onChanged: onChange,
+      controller: textEditingController,
+      autofocus: true,
+    );
   }
   void onChange(String val){
     if(val.length == 13){
@@ -41,109 +71,31 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       });
     }
   }
+  Widget _botonGuardarIngreso(){
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      key:scaffoldKey,
-      appBar:AppBar(
-        title: Text("Ingreso de Mercaderia"),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.remove), onPressed: null)
-        ],
-      ),
-      drawer: Drawer(
-        child: ListaDrawer(),
-    ),
-      body: Container(
-        padding: EdgeInsets.all(15.0),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              decoration: new InputDecoration(labelText: "Codigo de Barra"),
-              keyboardType: TextInputType.number,
-              onChanged: onChange,
-              controller: textEditingController,
-              autofocus: true,
-            ),
-            Container(
-                child: FutureBuilder<Producto>(
-                    future: productos,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
-                        return Container(
-                          margin: EdgeInsets.all(20.0),
-                          child:Center(child: CircularProgressIndicator())
-                        );
-                      }
-                      if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
-                        bool encontrado = false;
-                          listaProductos.forEach((producto){
-                            if(producto.codigoBarra == snapshot.data.codigoBarra){
-                              encontrado = true;
-                              producto.cantidad += 1;
-                            }
-                          });
-                       
-                          if(encontrado ==false){
-                            if(snapshot.data.id != null){
-                            listaProductos.add(snapshot.data);
-                            }else{
-                              scaffoldKey.currentState.showSnackBar(
-                                  new SnackBar(content: Text("El producto no existe"))
-                              );
-                            }
-                          }
-                      }
-                      return Expanded(
-                        child: ListView.builder(
-                            key: _listKey,
-                            itemCount: listaProductos.length ,
-                            itemBuilder: (context,index){
-                              return ListTile(
-                                title: Text('${listaProductos[index].nombre}'),
-                                subtitle: Text('${listaProductos[index].codigoBarra}'),
-                                trailing: Text('${listaProductos[index].cantidad}'),
-                                  onLongPress: (){_showDialog("eliminar");},
-                                  onTap: () { /* react to the tile being tapped */ }
-
-                              );
-                            }
-                        ),
-                      );
-                    }
-                )
-            ),
-            Container(
-
-              child: ButtonTheme(
-                minWidth: 300.0,
-                child: RaisedButton(
-                  onPressed: () {
-                    if(listaProductos.length> 0){
-                      fetchGuardarIngreso().then((estadoServer) => {
-                        if(estadoServer == 200){
-                          _showDialog("El ingreso de Mercadería se ha guardado con exito")
-                        }else{
-                          _showDialog("Ha ocurrido un error al guardar",true)
-                        }
-                      });
-                    }else{
-                      _showDialog("No existen productos para guardar");
-                    }
-                  },
-                  child: Text("Guardar"),
-                  colorBrightness: Brightness.dark,
-                ),
-              )
-            )
-          ],
-        ),
-      ),
+    return  Container(
+        child: ButtonTheme(
+          minWidth: 300.0,
+          child: RaisedButton(
+            onPressed: () {
+              if(listaProductos.length> 0){
+                fetchGuardarIngreso().then((estadoServer) => {
+                  if(estadoServer == 200){
+                    _showDialog("El ingreso de Mercadería se ha guardado con exito")
+                  }else{
+                    _showDialog("Ha ocurrido un error al guardar",true)
+                  }
+                });
+              }else{
+                _showDialog("No existen productos para guardar");
+              }
+            },
+            child: Text("Guardar"),
+            colorBrightness: Brightness.dark,
+          ),
+        )
     );
   }
-
    _showDialog(String texto,[bool error])  {
     return showDialog(
       context: context,
@@ -170,4 +122,65 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       },
     );
   }
+
+  Widget _listaProductos() {
+    return  Container(
+        child: FutureBuilder<Producto>(
+            future: productos,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                    margin: EdgeInsets.all(20.0),
+                    child:Center(child: CircularProgressIndicator())
+                );
+              }
+              if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
+                bool encontrado = false;
+                listaProductos.forEach((producto){
+                  if(producto.codigoBarra == snapshot.data.codigoBarra){
+                    encontrado = true;
+                    producto.cantidad += 1;
+                  }
+                });
+
+                if(encontrado ==false){
+                  if(snapshot.data.id != null){
+                    listaProductos.add(snapshot.data);
+                  }else{
+                    scaffoldKey.currentState.showSnackBar(
+                        new SnackBar(content: Text("El producto no existe"))
+                    );
+                  }
+                }
+              }
+              return Expanded(
+                child: ListView.builder(
+                    key: _listKey,
+                    itemCount: listaProductos.length ,
+                    itemBuilder: (context,index){
+                      return ListTile(
+                          title: Text('${listaProductos[index].nombre}'),
+                          subtitle: Text('${listaProductos[index].codigoBarra}'),
+                          trailing: Text('${listaProductos[index].cantidad}'),
+                          onLongPress: (){_showDialog("eliminar");},
+                          onTap: () { /* react to the tile being tapped */ }
+
+                      );
+                    }
+                ),
+              );
+            }
+        )
+    );
+  }
+
+  /*consumir api*/
+  Future<Producto> fetchProducto(String codBarra) async {
+    return await api.getProducto(codBarra);
+  }
+
+  Future<int> fetchGuardarIngreso() async {
+    return await api.postIngreso(listaProductos);
+  }
+
 }
