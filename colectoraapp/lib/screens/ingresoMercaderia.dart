@@ -26,6 +26,9 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       return await api.getProducto(codBarra);
   }
 
+  Future<String> fetchGuardarIngreso() async {
+    return await api.postIngreso(listaProductos);
+  }
   void onChange(String val){
     if(val.length == 13){
       setState(() {
@@ -103,7 +106,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                 minWidth: 300.0,
                 child: RaisedButton(
                   onPressed: () {
-
+                    fetchGuardarIngreso();
                   },
                   child: Text("Guardar"),
                   colorBrightness: Brightness.dark,

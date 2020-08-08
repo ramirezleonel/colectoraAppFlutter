@@ -14,15 +14,43 @@ class ApiManager {
     final decodedResponse = json.decode(source);
 
     final producto = Producto.fromJson(decodedResponse);
+
     return producto;
   }
-  Future<String> postIngreso(Map <String,dynamic> ingreso) async {
-    final jsonIngreso = json.encode(ingreso);
+  Future<String> postIngreso(List<Producto> producto) async {
+
+    Map <String,dynamic> map= new  Map <String,dynamic>() ;
+
+    producto.forEach((producto) => {
+
+      map["idarticulo"] = producto.id,
+      map["precio"] = 0,
+      map["cantidad"] = producto.cantidad}
+      );
+    print(map);
+    final jsonIngreso = jsonEncode(<String, dynamic>{
+        "idproveedor" : 1,
+        "tipocomprobante" : "COLECTORA",
+        "iva" : 21.00,
+        "serie" : "1",
+        "correlativa" : "0",
+        "estado" : "EMITIDO",
+        "movimiento" : "INGRESO",
+        "detalle_Movstocks":
+        [
+          map
+        ]
+
+    });
+
+
     final response = await http.post(
-      _url + '/stocks/',
+      _url + '/stock',
+      headers: {"Content-Type": "application/json"},
       body: jsonIngreso,
     );
-
+    print(response.statusCode);
     return response.body;
+  return "";
   }
 }
