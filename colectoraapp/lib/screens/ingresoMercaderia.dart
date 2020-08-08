@@ -18,7 +18,8 @@ class IngresoMercaderia extends StatefulWidget{
 class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
   Future <Producto> productos ;
-  List <Producto> listaProductos = new  List<Producto>();
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  List <Producto> listaProductos = new List<Producto>();
   final TextEditingController textEditingController = new TextEditingController();
   final api = ApiManager();
 
@@ -26,16 +27,14 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       return await api.getProducto(codBarra);
   }
 
-  Future<String> fetchGuardarIngreso() async {
+  Future<int> fetchGuardarIngreso() async {
     return await api.postIngreso(listaProductos);
   }
   void onChange(String val){
     if(val.length == 13){
       setState(() {
         codigoBarra = val ;
-
         productos = fetchProducto(codigoBarra);
-
         textEditingController.clear();
       });
     }
@@ -86,6 +85,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                       }
                       return Expanded(
                         child: ListView.builder(
+                            key: _listKey,
                             itemCount: listaProductos.length ,
                             itemBuilder: (context,index){
                               return ListTile(
@@ -106,13 +106,23 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                 minWidth: 300.0,
                 child: RaisedButton(
                   onPressed: () {
-                    fetchGuardarIngreso();
+                    if(listaProductos.length> 0){
+                      fetchGuardarIngreso().then((estadoServer) => {
+                        if(estadoServer == 200){
+                          _showDialog("El ingreso de Mercadería se ha guardado con exito")
+                        }else{
+                          _showDialog("Ha ocurrido un error al guardar",true)
+                        }
+                      });
+                    }else{
+                      _showDialog("No existen productos para guardar");
+                    }
+
                   },
                   child: Text("Guardar"),
                   colorBrightness: Brightness.dark,
                 ),
               )
-
             )
           ],
         ),
@@ -120,8 +130,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-  Future<void> _showDialog(String texto) async {
-    return showDialog<void>(
+   _showDialog(String texto,[bool error])  {
+    return showDialog(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
@@ -131,7 +141,14 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
             FlatButton(
               child: Text('Aceptar'),
               onPressed: () {
-                Navigator.of(context).pop();
+                if(error == null){
+                  setState(() {
+                    productos = null;
+                    this.listaProductos.clear();
+                  });
+                }
+              Navigator.of(context).pop();
+
               },
             ),
           ],

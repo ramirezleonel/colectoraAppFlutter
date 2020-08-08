@@ -17,7 +17,7 @@ class ApiManager {
 
     return producto;
   }
-  Future<String> postIngreso(List<Producto> producto) async {
+  Future<int> postIngreso(List<Producto> producto) async {
 
    var mapProducto = producto.map((p) => {"idarticulo" : p.id ,
      "precio":0,
@@ -34,14 +34,14 @@ class ApiManager {
         "movimiento" : "INGRESO",
         "detalle_Movstocks": mapProducto
     });
-
+    print(jsonIngreso);
     final response = await http.post(
       _url + '/stock',
       headers: {"Content-Type": "application/json"},
       body: jsonIngreso,
     );
-    print(response.statusCode);
-    return response.body;
-  return "";
+
+    return response.statusCode;
+
   }
 }
