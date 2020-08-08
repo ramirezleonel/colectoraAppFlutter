@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:colectoraapp/Model/producto.dart';
 import 'package:colectoraapp/Providers/ApiManager.dart';
 import 'package:colectoraapp/Widget/ListaDrawer.dart';
+import 'package:colectoraapp/Widget/appBarCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
   Future <Producto> productos ;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   List <Producto> listaProductos = new List<Producto>();
   final TextEditingController textEditingController = new TextEditingController();
   final api = ApiManager();
@@ -44,10 +46,14 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar:
-      AppBar(
+      key:scaffoldKey,
+      appBar:AppBar(
         title: Text("Ingreso de Mercaderia"),
-      ),drawer: Drawer(
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.remove), onPressed: null)
+        ],
+      ),
+      drawer: Drawer(
         child: ListaDrawer(),
     ),
       body: Container(
@@ -79,8 +85,15 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                               producto.cantidad += 1;
                             }
                           });
+                       
                           if(encontrado ==false){
+                            if(snapshot.data.id != null){
                             listaProductos.add(snapshot.data);
+                            }else{
+                              scaffoldKey.currentState.showSnackBar(
+                                  new SnackBar(content: Text("El producto no existe"))
+                              );
+                            }
                           }
                       }
                       return Expanded(
@@ -92,7 +105,9 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                                 title: Text('${listaProductos[index].nombre}'),
                                 subtitle: Text('${listaProductos[index].codigoBarra}'),
                                 trailing: Text('${listaProductos[index].cantidad}'),
+                                  onLongPress: (){_showDialog("eliminar");},
                                   onTap: () { /* react to the tile being tapped */ }
+
                               );
                             }
                         ),
@@ -117,7 +132,6 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                     }else{
                       _showDialog("No existen productos para guardar");
                     }
-
                   },
                   child: Text("Guardar"),
                   colorBrightness: Brightness.dark,
