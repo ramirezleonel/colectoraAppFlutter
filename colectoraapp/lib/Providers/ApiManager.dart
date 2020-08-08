@@ -19,15 +19,11 @@ class ApiManager {
   }
   Future<String> postIngreso(List<Producto> producto) async {
 
-    Map <String,dynamic> map= new  Map <String,dynamic>() ;
+   var mapProducto = producto.map((p) => {"idarticulo" : p.id ,
+     "precio":0,
+     "cantidad": p.cantidad
+   }).toList();
 
-    producto.forEach((producto) => {
-
-      map["idarticulo"] = producto.id,
-      map["precio"] = 0,
-      map["cantidad"] = producto.cantidad}
-      );
-    print(map);
     final jsonIngreso = jsonEncode(<String, dynamic>{
         "idproveedor" : 1,
         "tipocomprobante" : "COLECTORA",
@@ -36,13 +32,8 @@ class ApiManager {
         "correlativa" : "0",
         "estado" : "EMITIDO",
         "movimiento" : "INGRESO",
-        "detalle_Movstocks":
-        [
-          map
-        ]
-
+        "detalle_Movstocks": mapProducto
     });
-
 
     final response = await http.post(
       _url + '/stock',
