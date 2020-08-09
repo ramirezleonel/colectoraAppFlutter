@@ -28,7 +28,8 @@ class _ListItemProductoState extends State<ListItemProducto> {
             title: new Text(widget.nombre),
             subtitle: new Text(widget.codigoBarra),
             trailing:  StepperSwipe(
-              initialValue:0,
+              initialValue:1,
+              iconsColor: Colors.blue,
               speedTransitionLimitCount: 1,
               firstIncrementDuration: Duration(milliseconds: 100),
               secondIncrementDuration: Duration(milliseconds: 100),
