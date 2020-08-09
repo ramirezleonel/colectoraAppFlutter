@@ -25,6 +25,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   List<int> seleccionadoEliminar = new List<int>();
 
   var colorAppBar=Colors.blue;
+  var tituloAppBar=Text("Ingreso de Mercadería");
+
   Future <Producto> productos ;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -39,7 +41,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       key:scaffoldKey,
       appBar:AppBar(
         backgroundColor: colorAppBar,
-        title: Text("Ingreso de Mercaderia"),
+        title: tituloAppBar,
         actions: <Widget>[
           _botonBorrarProducto(),
         ],
@@ -70,17 +72,21 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         this.contador--;
         seleccionadoEliminar.remove(id);
       }
-      productos = null;
+
       if(this.contador > 0 ){
         colorAppBar = Colors.grey;
         isBotonBorrar = true;
-
+        tituloAppBar = Text("");
       }else{
-        isBotonBorrar = false;
-        colorAppBar = Colors.blue;
-
+        _DeseleccionarTodo();
       }
       });
+  }
+  _DeseleccionarTodo(){
+    isBotonBorrar = false;
+    colorAppBar = Colors.blue;
+    contador = 0;
+    tituloAppBar = Text("Ingreso de Mercadería");
   }
   Widget _botonBorrarProducto(){
     return Visibility(
@@ -90,8 +96,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
            seleccionadoEliminar.forEach((id) {
              listaProductos.removeWhere((producto) => producto.id == id);
            });
-           isBotonBorrar = false;
-           colorAppBar = Colors.blue;
+           _DeseleccionarTodo();
          });
        }),
     );
