@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:colectoraapp/Model/producto.dart';
 import 'package:colectoraapp/Providers/ApiManager.dart';
+import 'package:colectoraapp/Widget/ListItemProducto.dart';
 import 'package:colectoraapp/Widget/ListaDrawer.dart';
 import 'package:colectoraapp/Widget/appBarCustom.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +19,10 @@ class IngresoMercaderia extends StatefulWidget{
 
 class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
+  bool isSelected = false;
+  bool isBotonBorrar = false;
+
+  var mycolor=Colors.white;
   Future <Producto> productos ;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -33,7 +38,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       appBar:AppBar(
         title: Text("Ingreso de Mercaderia"),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.remove), onPressed: (){})
+          _botonBorrarProducto(),
         ],
       ),
       drawer: Drawer(
@@ -44,7 +49,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         child: Column(
           children: <Widget>[
            _inputCodigoBarra(),
-            _listaProductos(),
+            _listaPrueba(),
             _botonGuardarIngreso()
           ],
         ),
@@ -52,7 +57,18 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
+  _actualizarBotonBorrar(bool isBorrar) {
+    setState(() {
+      isBotonBorrar = isBorrar;
 
+    });
+  }
+  Widget _botonBorrarProducto(){
+    return Visibility(
+      visible: isBotonBorrar,
+       child: IconButton(icon: Icon(Icons.delete), onPressed: (){}),
+    );
+  }
   Widget _inputCodigoBarra(){
     return TextField(
       decoration: new InputDecoration(labelText: "Codigo de Barra"),
@@ -123,6 +139,32 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
+  Widget _listaPrueba(){
+    return Container(
+      child:Expanded(
+         child: ListView(
+           children: <Widget>[
+             ListItemProducto(id: 1,cantidad: 2,codigoBarra: "4334343434",nombre: "Pan dulce",parentAction: _actualizarBotonBorrar),
+             ListItemProducto(id: 3,cantidad: 3,codigoBarra: "4334343434",nombre: "Coca-cola",parentAction: _actualizarBotonBorrar ),
+             ListItemProducto(id: 2,cantidad: 4,codigoBarra: "4334343434",nombre: "Sal fina" ,parentAction: _actualizarBotonBorrar),
+           ],
+         )
+
+      ),
+
+    );
+  }
+  void toggleSelection() {
+    setState(() {
+      if (isSelected) {
+        mycolor=Colors.white;
+        isSelected = false;
+      } else {
+        mycolor=Colors.grey[300];
+        isSelected = true;
+      }
+    });
+  }
   Widget _listaProductos() {
     return  Container(
         child: FutureBuilder<Producto>(
