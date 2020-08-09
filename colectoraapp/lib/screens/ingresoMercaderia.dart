@@ -60,16 +60,19 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-  _actualizarBotonBorrar(bool isSelected) {
+  _actualizarBotonBorrar(bool isSelected,int id) {
+
     setState(() {
       if(isSelected == true){
         this.contador++;
+        seleccionadoEliminar.add(id);
       }else{
         this.contador--;
+        seleccionadoEliminar.remove(id);
       }
       productos = null;
       if(this.contador > 0 ){
-        colorAppBar = Colors.indigo;
+        colorAppBar = Colors.grey;
         isBotonBorrar = true;
 
       }else{
@@ -82,7 +85,15 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   Widget _botonBorrarProducto(){
     return Visibility(
       visible: isBotonBorrar,
-       child: IconButton(icon: Icon(Icons.delete), onPressed: (){}),
+       child: IconButton(icon: Icon(Icons.delete), onPressed: (){
+         setState(() {
+           seleccionadoEliminar.forEach((id) {
+             listaProductos.removeWhere((producto) => producto.id == id);
+           });
+           isBotonBorrar = false;
+           colorAppBar = Colors.blue;
+         });
+       }),
     );
   }
   Widget _inputCodigoBarra(){

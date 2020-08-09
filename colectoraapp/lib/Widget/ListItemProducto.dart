@@ -6,7 +6,8 @@ class ListItemProducto extends StatefulWidget {
   final String codigoBarra;
    int cantidad;
 
-  final ValueChanged<bool> accionPadre;
+//  final ValueChanged<bool> accionPadre;
+    final Function(bool,int id) accionPadre;
   ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.accionPadre});
 
   @override
@@ -40,22 +41,24 @@ class _ListItemProductoState extends State<ListItemProducto> {
               withFastCount: true,
               onChanged: (int val) => widget.cantidad = val,
             ),
-            onLongPress: toggleSelection // what should I put here,
+            onLongPress:(){
+              toggleSelection(widget.id);
+            } // what should I put here,
         )
       ]),
     );
   }
 
-  void toggleSelection() {
+ toggleSelection(int id) {
     setState(() {
       if (isSelected) {
         mycolor=Colors.white;
         isSelected = false;
-        widget.accionPadre(false);
+        widget.accionPadre(false,id);
       } else {
         mycolor=Colors.grey[300];
         isSelected = true;
-        widget.accionPadre(true);
+        widget.accionPadre(true,id);
       }
     });
   }
