@@ -22,6 +22,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   bool isSelected = false;
   bool isBotonBorrar = false;
   int contador = 0;
+  List<int> seleccionadoEliminar = new List<int>();
 
   var colorAppBar=Colors.blue;
   Future <Producto> productos ;
@@ -51,7 +52,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         child: Column(
           children: <Widget>[
            _inputCodigoBarra(),
-            _listaPrueba(),
+            _listaProductos(),
             _botonGuardarIngreso()
           ],
         ),
@@ -66,12 +67,15 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       }else{
         this.contador--;
       }
+      productos = null;
       if(this.contador > 0 ){
         colorAppBar = Colors.indigo;
         isBotonBorrar = true;
+
       }else{
         isBotonBorrar = false;
         colorAppBar = Colors.blue;
+
       }
       });
   }
@@ -151,21 +155,21 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-  Widget _listaPrueba(){
-    return Container(
-      child:Expanded(
-         child: ListView(
-           children: <Widget>[
-             ListItemProducto(id: 1,cantidad: 2,codigoBarra: "4334343434",nombre: "Pan dulce",accionPadre: _actualizarBotonBorrar),
-             ListItemProducto(id: 3,cantidad: 3,codigoBarra: "4334343434",nombre: "Coca-cola",accionPadre: _actualizarBotonBorrar ),
-             ListItemProducto(id: 2,cantidad: 4,codigoBarra: "4334343434",nombre: "Sal fina" ,accionPadre: _actualizarBotonBorrar),
-           ],
-         )
-
-      ),
-
-    );
-  }
+//  Widget _listaPrueba(){
+//    return Container(
+//      child:Expanded(
+//         child: ListView(
+//           children: <Widget>[
+//             ListItemProducto(id: 1,cantidad: 2,codigoBarra: "4334343434",nombre: "Pan dulce",accionPadre: _actualizarBotonBorrar),
+//             ListItemProducto(id: 3,cantidad: 3,codigoBarra: "4334343434",nombre: "Coca-cola",accionPadre: _actualizarBotonBorrar ),
+//             ListItemProducto(id: 2,cantidad: 4,codigoBarra: "4334343434",nombre: "Sal fina" ,accionPadre: _actualizarBotonBorrar),
+//           ],
+//         )
+//
+//      ),
+//
+//    );
+//  }
 
   Widget _listaProductos() {
     return  Container(
@@ -191,9 +195,9 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                   if(snapshot.data.id != null){
                     listaProductos.add(snapshot.data);
                   }else{
-                    scaffoldKey.currentState.showSnackBar(
-                        new SnackBar(content: Text("El producto no existe"))
-                    );
+//                    scaffoldKey.currentState.showSnackBar(
+//                        new SnackBar(content: Text("El producto no existe"))
+//                    );
                   }
                 }
               }
@@ -202,14 +206,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                     key: _listKey,
                     itemCount: listaProductos.length ,
                     itemBuilder: (context,index){
-                      return ListTile(
-                          title: Text('${listaProductos[index].nombre}'),
-                          subtitle: Text('${listaProductos[index].codigoBarra}'),
-                          trailing: Text('${listaProductos[index].cantidad}'),
-                          onLongPress: (){_showDialog("eliminar");},
-                          onTap: () { /* react to the tile being tapped */ }
+                     return ListItemProducto(id: listaProductos[index].id,cantidad: listaProductos[index].cantidad,codigoBarra:listaProductos[index].codigoBarra,nombre: listaProductos[index].nombre,accionPadre: _actualizarBotonBorrar);
 
-                      );
                     }
                 ),
               );

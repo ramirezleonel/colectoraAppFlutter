@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:stepper_counter_swipe/stepper_counter_swipe.dart';
 class ListItemProducto extends StatefulWidget {
   final int id;
   final String nombre;
   final String codigoBarra;
-  final int cantidad;
+   int cantidad;
 
   final ValueChanged<bool> accionPadre;
   ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.accionPadre});
@@ -25,7 +26,20 @@ class _ListItemProductoState extends State<ListItemProducto> {
             selected: isSelected,
             title: new Text(widget.nombre),
             subtitle: new Text(widget.codigoBarra),
-            trailing: new Text('${widget.cantidad}'),
+            trailing:  StepperSwipe(
+              initialValue:0,
+              speedTransitionLimitCount: 1,
+              firstIncrementDuration: Duration(milliseconds: 100),
+              secondIncrementDuration: Duration(milliseconds: 100),
+              direction: Axis.horizontal,
+              dragButtonColor: Colors.blue,
+              withSpring: true,
+              maxValue:1000,
+              stepperValue:widget.cantidad,
+              withNaturalNumbers: true,
+              withFastCount: true,
+              onChanged: (int val) => widget.cantidad = val,
+            ),
             onLongPress: toggleSelection // what should I put here,
         )
       ]),
