@@ -21,6 +21,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
   bool isSelected = false;
   bool isBotonBorrar = false;
+  int contador = 0;
 
   var mycolor=Colors.white;
   Future <Producto> productos ;
@@ -57,10 +58,14 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-  _actualizarBotonBorrar(bool isBorrar) {
+  _actualizarBotonBorrar(bool isSelected) {
     setState(() {
-      isBotonBorrar = isBorrar;
-
+      if(isSelected == true){
+        this.contador++;
+      }else{
+        this.contador--;
+      }
+      this.contador > 0 ? isBotonBorrar = true: isBotonBorrar = false;
     });
   }
   Widget _botonBorrarProducto(){
@@ -144,9 +149,9 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       child:Expanded(
          child: ListView(
            children: <Widget>[
-             ListItemProducto(id: 1,cantidad: 2,codigoBarra: "4334343434",nombre: "Pan dulce",parentAction: _actualizarBotonBorrar),
-             ListItemProducto(id: 3,cantidad: 3,codigoBarra: "4334343434",nombre: "Coca-cola",parentAction: _actualizarBotonBorrar ),
-             ListItemProducto(id: 2,cantidad: 4,codigoBarra: "4334343434",nombre: "Sal fina" ,parentAction: _actualizarBotonBorrar),
+             ListItemProducto(id: 1,cantidad: 2,codigoBarra: "4334343434",nombre: "Pan dulce",accionPadre: _actualizarBotonBorrar),
+             ListItemProducto(id: 3,cantidad: 3,codigoBarra: "4334343434",nombre: "Coca-cola",accionPadre: _actualizarBotonBorrar ),
+             ListItemProducto(id: 2,cantidad: 4,codigoBarra: "4334343434",nombre: "Sal fina" ,accionPadre: _actualizarBotonBorrar),
            ],
          )
 

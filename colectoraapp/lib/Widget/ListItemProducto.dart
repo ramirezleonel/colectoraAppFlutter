@@ -5,8 +5,8 @@ class ListItemProducto extends StatefulWidget {
   final String codigoBarra;
   final int cantidad;
 
-  final ValueChanged<bool> parentAction;
-  ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.parentAction});
+  final ValueChanged<bool> accionPadre;
+  ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.accionPadre});
 
   @override
   _ListItemProductoState createState() => _ListItemProductoState();
@@ -37,11 +37,11 @@ class _ListItemProductoState extends State<ListItemProducto> {
       if (isSelected) {
         mycolor=Colors.white;
         isSelected = false;
-        widget.parentAction(false);
+        widget.accionPadre(false);
       } else {
         mycolor=Colors.grey[300];
         isSelected = true;
-        widget.parentAction(true);
+        widget.accionPadre(true);
       }
     });
   }
