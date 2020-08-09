@@ -23,7 +23,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   bool isBotonBorrar = false;
   int contador = 0;
 
-  var mycolor=Colors.white;
+  var colorAppBar=Colors.blue;
   Future <Producto> productos ;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -37,6 +37,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     return Scaffold(
       key:scaffoldKey,
       appBar:AppBar(
+        backgroundColor: colorAppBar,
         title: Text("Ingreso de Mercaderia"),
         actions: <Widget>[
           _botonBorrarProducto(),
@@ -65,8 +66,14 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       }else{
         this.contador--;
       }
-      this.contador > 0 ? isBotonBorrar = true: isBotonBorrar = false;
-    });
+      if(this.contador > 0 ){
+        colorAppBar = Colors.indigo;
+        isBotonBorrar = true;
+      }else{
+        isBotonBorrar = false;
+        colorAppBar = Colors.blue;
+      }
+      });
   }
   Widget _botonBorrarProducto(){
     return Visibility(
@@ -159,17 +166,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
 
     );
   }
-  void toggleSelection() {
-    setState(() {
-      if (isSelected) {
-        mycolor=Colors.white;
-        isSelected = false;
-      } else {
-        mycolor=Colors.grey[300];
-        isSelected = true;
-      }
-    });
-  }
+
   Widget _listaProductos() {
     return  Container(
         child: FutureBuilder<Producto>(
