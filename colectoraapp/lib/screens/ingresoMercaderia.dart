@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:colectoraapp/Model/producto.dart';
 import 'package:colectoraapp/Providers/ApiManager.dart';
@@ -6,6 +7,7 @@ import 'package:colectoraapp/Widget/ListaDrawer.dart';
 import 'package:colectoraapp/Widget/appBarCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class IngresoMercaderia extends StatefulWidget{
   @override
@@ -60,23 +62,25 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
+
   _actualizarBotonBorrar(bool isSelected,int id) {
 
     setState(() {
-        if(isSelected == true){
-          this.contador++;
-          seleccionadoEliminar.add(id);
-        }else{
-          this.contador--;
-          seleccionadoEliminar.remove(id);
-        }
-        if(this.contador > 0 ){
-          colorAppBar = Colors.grey;
-          isBotonBorrar = true;
-          tituloAppBar = Text("");
-        }else{
-          _DeseleccionarTodo();
-        }
+      if(isSelected == true){
+        this.contador++;
+        seleccionadoEliminar.add(id);
+      }else{
+        this.contador--;
+        seleccionadoEliminar.remove(id);
+      }
+      productos = null;
+      if(this.contador > 0 ){
+        colorAppBar = Colors.grey;
+        isBotonBorrar = true;
+
+      }else{
+        _DeseleccionarTodo();
+      }
     });
   }
   _DeseleccionarTodo(){
