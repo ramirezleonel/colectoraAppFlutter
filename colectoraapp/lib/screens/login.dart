@@ -7,25 +7,26 @@ class Login extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Login"),
-        ),
+      backgroundColor: Colors.blueAccent,
       body: SafeArea(
-
-        child: SingleChildScrollView(
-         child: Card(
+        child:Center(
+          child: SingleChildScrollView(
+          child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
               margin:EdgeInsets.all( 10),
               child: Container(
-                  padding: EdgeInsets.all( 15),
+                  padding: EdgeInsets.all( 20),
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(30),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
                             color: Colors.black26,
-                            blurRadius: 3.0,
-                            offset: Offset(0.0,5.0),
-                            spreadRadius: 3.0
+                            blurRadius: 5.0,
+                            offset: Offset(1.0,5.0,),
+                            spreadRadius: 5.0
                         )
                       ]
                   ),
@@ -72,9 +73,25 @@ class Login extends StatelessWidget{
                   )
               )
           ),
-        )
+        ))
+
       ),
     );
+  }
+
+
+}
+class BackgroundShape extends CustomClipper<Path>{
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
   }
 
 }
