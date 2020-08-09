@@ -34,7 +34,7 @@ class ApiManager {
         "movimiento" : "INGRESO",
         "detalle_Movstocks": mapProducto
     });
-    print(jsonIngreso);
+
     final response = await http.post(
       _url + '/stock',
       headers: {"Content-Type": "application/json"},

@@ -1,5 +1,5 @@
 import 'package:colectoraapp/Model/producto.dart';
-import 'package:colectoraapp/screens/ProductoItem.dart';
+
 import 'package:flutter/material.dart';
 
 

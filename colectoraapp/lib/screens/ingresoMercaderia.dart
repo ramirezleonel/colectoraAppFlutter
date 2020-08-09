@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:colectoraapp/Model/producto.dart';
 import 'package:colectoraapp/Providers/ApiManager.dart';
@@ -7,7 +6,6 @@ import 'package:colectoraapp/Widget/ListaDrawer.dart';
 import 'package:colectoraapp/Widget/appBarCustom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class IngresoMercaderia extends StatefulWidget{
   @override
@@ -65,22 +63,21 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   _actualizarBotonBorrar(bool isSelected,int id) {
 
     setState(() {
-      if(isSelected == true){
-        this.contador++;
-        seleccionadoEliminar.add(id);
-      }else{
-        this.contador--;
-        seleccionadoEliminar.remove(id);
-      }
-
-      if(this.contador > 0 ){
-        colorAppBar = Colors.grey;
-        isBotonBorrar = true;
-        tituloAppBar = Text("");
-      }else{
-        _DeseleccionarTodo();
-      }
-      });
+        if(isSelected == true){
+          this.contador++;
+          seleccionadoEliminar.add(id);
+        }else{
+          this.contador--;
+          seleccionadoEliminar.remove(id);
+        }
+        if(this.contador > 0 ){
+          colorAppBar = Colors.grey;
+          isBotonBorrar = true;
+          tituloAppBar = Text("");
+        }else{
+          _DeseleccionarTodo();
+        }
+    });
   }
   _DeseleccionarTodo(){
     isBotonBorrar = false;
@@ -88,6 +85,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     contador = 0;
     tituloAppBar = Text("Ingreso de Mercadería");
   }
+
   Widget _botonBorrarProducto(){
     return Visibility(
       visible: isBotonBorrar,
@@ -200,6 +198,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
               }
               if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
                 bool encontrado = false;
+
                 listaProductos.forEach((producto){
                   if(producto.codigoBarra == snapshot.data.codigoBarra){
                     encontrado = true;
@@ -222,7 +221,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                     key: _listKey,
                     itemCount: listaProductos.length ,
                     itemBuilder: (context,index){
-                     return ListItemProducto(id: listaProductos[index].id,cantidad: listaProductos[index].cantidad,codigoBarra:listaProductos[index].codigoBarra,nombre: listaProductos[index].nombre,accionPadre: _actualizarBotonBorrar);
+
+                     return ListItemProducto(id: listaProductos[index].id,cantidad: listaProductos[index].cantidad,codigoBarra:listaProductos[index].codigoBarra,nombre: listaProductos[index].nombre,precio: listaProductos[index].precio,accionPadre: _actualizarBotonBorrar);
 
                     }
                 ),

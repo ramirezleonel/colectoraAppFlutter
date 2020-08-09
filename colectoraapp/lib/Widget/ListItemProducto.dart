@@ -1,14 +1,17 @@
+import 'package:colectoraapp/screens/DetalleProducto.dart';
 import 'package:flutter/material.dart';
 import 'package:stepper_counter_swipe/stepper_counter_swipe.dart';
 class ListItemProducto extends StatefulWidget {
   final int id;
   final String nombre;
   final String codigoBarra;
+  final double precio;
    int cantidad;
+
 
 //  final ValueChanged<bool> accionPadre;
     final Function(bool,int id) accionPadre;
-  ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.accionPadre});
+  ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.precio,this.accionPadre});
 
   @override
   _ListItemProductoState createState() => _ListItemProductoState();
@@ -44,7 +47,11 @@ class _ListItemProductoState extends State<ListItemProducto> {
             ),
             onLongPress:(){
               toggleSelection(widget.id);
-            } // what should I put here,
+            },
+          onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DetalleProducto(id:widget.id,nombre: widget.nombre,codigoBarra: widget.codigoBarra,precio: widget.precio,)));
+          },//
+          // what should I put here,
         )
       ]),
     );
