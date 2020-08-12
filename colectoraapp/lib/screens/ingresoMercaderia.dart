@@ -221,10 +221,15 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                   if(snapshot.data.id != null){
                     listaProductos.add(snapshot.data);
                   }else{
-//                    scaffoldKey.currentState.showSnackBar(
-//                        new SnackBar(content: Text("El producto no existe"))
-//                    );
-                  }
+                    Future.delayed(Duration.zero, () {
+                      scaffoldKey.currentState.showSnackBar(
+                          SnackBar(
+                              content: Text("No se ha encontrado el producto"),
+                              backgroundColor: Colors.orangeAccent
+                          )
+                      );
+                    });
+                 }
                 }
               }
               return Expanded(
