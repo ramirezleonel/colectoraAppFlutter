@@ -68,6 +68,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     setState(() {
       productos = null;
       listaProductos.firstWhere((producto) => producto.id == id).cantidad = cantidad;
+      print(cantidad);
     });
   }
   _actualizarBotonBorrar(bool isSelected,int id) {

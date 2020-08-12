@@ -49,15 +49,14 @@ class _ListItemProductoState extends State<ListItemProducto> {
       initialValue:1,
       iconsColor: Colors.blue,
       speedTransitionLimitCount: 1,
-      firstIncrementDuration: Duration(milliseconds: 100),
-      secondIncrementDuration: Duration(milliseconds: 100),
+      firstIncrementDuration: Duration(milliseconds: 1000),
+      secondIncrementDuration: Duration(milliseconds: 1000),
       direction: Axis.horizontal,
       dragButtonColor: Colors.blue,
       withSpring: true,
       maxValue:1000,
       stepperValue:widget.cantidad,
       withNaturalNumbers: true,
-      withFastCount: true,
       onChanged: (int cantidad) => {
       widget.accionCantidad(widget.id,cantidad)
       }
