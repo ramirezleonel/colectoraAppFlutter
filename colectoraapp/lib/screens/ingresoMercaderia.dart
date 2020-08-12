@@ -136,11 +136,15 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
           child: RaisedButton(
             onPressed: () {
               if(listaProductos.length> 0){
-                fetchGuardarIngreso().then((estadoServer) => {
-                  if(estadoServer == 200){
-                    _showDialog("El ingreso de Mercadería se ha guardado con exito")
-                  }else{
-                    _showDialog("Ha ocurrido un error al guardar",true)
+                _confirmDialog().then((isGuardar) => {
+                  if(isGuardar ==true){
+                        fetchGuardarIngreso().then((estadoServer) => {
+                      if(estadoServer == 200){
+                        _showDialog("El ingreso de Mercadería se ha guardado con exito")
+                      }else{
+                        _showDialog("Ha ocurrido un error al guardar",true)
+                      }
+                    })
                   }
                 });
               }else{
@@ -177,6 +181,33 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
           ],
         );
       },
+    );
+  }
+  Future<bool> _confirmDialog() async {
+    return await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('Estás seguro de guardar el ingreso de mercadería'),
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SimpleDialogOption(
+                    onPressed: () { Navigator.pop(context, true); },
+                    child: const Text('Confirmar',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SimpleDialogOption(
+                    onPressed: () { Navigator.pop(context, false); },
+                    child: const Text('Cancelar'),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
     );
   }
 
