@@ -37,7 +37,9 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return Scaffold(
+
       key:scaffoldKey,
       appBar:AppBar(
         backgroundColor: colorAppBar,
@@ -62,7 +64,12 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-
+  _actualizarStepperSwipe(int id,int cantidad) {
+    setState(() {
+      productos = null;
+      listaProductos.firstWhere((producto) => producto.id == id).cantidad = cantidad;
+    });
+  }
   _actualizarBotonBorrar(bool isSelected,int id) {
 
     setState(() {
@@ -226,8 +233,13 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                     itemCount: listaProductos.length ,
                     itemBuilder: (context,index){
 
-                     return ListItemProducto(id: listaProductos[index].id,cantidad: listaProductos[index].cantidad,codigoBarra:listaProductos[index].codigoBarra,nombre: listaProductos[index].nombre,precio: listaProductos[index].precio,accionPadre: _actualizarBotonBorrar);
-
+                     return ListItemProducto(id: listaProductos[index].id,
+                         cantidad: listaProductos[index].cantidad,
+                         codigoBarra:listaProductos[index].codigoBarra,
+                         nombre: listaProductos[index].nombre,
+                         precio: listaProductos[index].precio,
+                         accionPadre: _actualizarBotonBorrar,
+                         accionCantidad : _actualizarStepperSwipe);
                     }
                 ),
               );

@@ -5,7 +5,7 @@ class Producto {
   final String nombre;
   final String codigoBarra;
   final double precio;
-   int cantidad;
+        int cantidad;
   Producto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.precio});
 
   factory Producto.fromJson(Map<String, dynamic> json) {

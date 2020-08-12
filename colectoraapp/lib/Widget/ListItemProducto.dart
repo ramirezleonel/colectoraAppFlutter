@@ -11,7 +11,8 @@ class ListItemProducto extends StatefulWidget {
 
 //  final ValueChanged<bool> accionPadre;
     final Function(bool,int id) accionPadre;
-  ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.precio,this.accionPadre});
+  final Function(int id,int cantidad) accionCantidad;
+  ListItemProducto({this.id,this.nombre,this.codigoBarra,this.cantidad,this.precio,this.accionPadre,this.accionCantidad});
 
   @override
   _ListItemProductoState createState() => _ListItemProductoState();
@@ -30,21 +31,7 @@ class _ListItemProductoState extends State<ListItemProducto> {
             selected: isSelected,
             title: new Text(widget.nombre),
             subtitle: new Text(widget.codigoBarra),
-            trailing:  StepperSwipe(
-              initialValue:1,
-              iconsColor: Colors.blue,
-              speedTransitionLimitCount: 1,
-              firstIncrementDuration: Duration(milliseconds: 100),
-              secondIncrementDuration: Duration(milliseconds: 100),
-              direction: Axis.horizontal,
-              dragButtonColor: Colors.blue,
-              withSpring: true,
-              maxValue:1000,
-              stepperValue:widget.cantidad,
-              withNaturalNumbers: true,
-              withFastCount: true,
-              onChanged: (int val) => widget.cantidad = val,
-            ),
+            trailing:contador(),
             onLongPress:(){
               toggleSelection(widget.id);
             },
@@ -54,6 +41,26 @@ class _ListItemProductoState extends State<ListItemProducto> {
           // what should I put here,
         )
       ]),
+    );
+  }
+
+  Widget contador(){
+   return StepperSwipe(
+      initialValue:1,
+      iconsColor: Colors.blue,
+      speedTransitionLimitCount: 1,
+      firstIncrementDuration: Duration(milliseconds: 100),
+      secondIncrementDuration: Duration(milliseconds: 100),
+      direction: Axis.horizontal,
+      dragButtonColor: Colors.blue,
+      withSpring: true,
+      maxValue:1000,
+      stepperValue:widget.cantidad,
+      withNaturalNumbers: true,
+      withFastCount: true,
+      onChanged: (int cantidad) => {
+      widget.accionCantidad(widget.id,cantidad)
+      }
     );
   }
 
