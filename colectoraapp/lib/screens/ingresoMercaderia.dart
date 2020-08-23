@@ -21,8 +21,11 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   String codigoBarra = "";
   bool isSelected = false;
   bool isBotonBorrar = false;
+  bool isBotonEditar = false;
+
   int contador = 0;
   List<int> seleccionadoEliminar = new List<int>();
+  TextEditingController controllerDialogCantidad = new TextEditingController();
 
   var colorAppBar=Colors.blue;
   var tituloAppBar=Text("Ingreso de Mercadería");
@@ -45,6 +48,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         backgroundColor: colorAppBar,
         title: tituloAppBar,
         actions: <Widget>[
+          _botonEditarProducto(),
           _botonBorrarProducto(),
         ],
       ),
@@ -56,7 +60,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         child: Column(
           children: <Widget>[
            _inputCodigoBarra(),
-            _listaProductos(),
+            _listaPrueba(),
             _botonGuardarIngreso()
           ],
         ),
@@ -85,6 +89,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       if(this.contador > 0 ){
         colorAppBar = Colors.grey;
         isBotonBorrar = true;
+        this.contador > 1 ? isBotonEditar = false:isBotonEditar = true ;
 
       }else{
         _DeseleccionarTodo();
@@ -93,6 +98,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   }
   _DeseleccionarTodo(){
     isBotonBorrar = false;
+    isBotonEditar = false;
     colorAppBar = Colors.blue;
     contador = 0;
     tituloAppBar = Text("Ingreso de Mercadería");
@@ -101,7 +107,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
   Widget _botonBorrarProducto(){
     return Visibility(
       visible: isBotonBorrar,
-       child: IconButton(icon: Icon(Icons.delete), onPressed: (){
+       child: IconButton(icon: Icon(Icons.delete),
+         onPressed: (){
          setState(() {
            seleccionadoEliminar.forEach((id) {
              listaProductos.removeWhere((producto) => producto.id == id);
@@ -109,6 +116,16 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
            _DeseleccionarTodo();
          });
        }),
+    );
+  }
+
+  Widget _botonEditarProducto(){
+    return Visibility(
+      visible: isBotonEditar,
+      child: IconButton(icon: Icon(Icons.edit),
+        onPressed: (){
+          dialogCantidad(context);
+        }),
     );
   }
   Widget _inputCodigoBarra(){
@@ -184,6 +201,32 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       },
     );
   }
+
+  dialogCantidad(BuildContext context) {
+    return showDialog(context: context,
+    builder: (context){
+      return AlertDialog(
+        title: Text("Ingrese la cantidad del producto"),
+        content: TextField(
+          controller:controllerDialogCantidad ,
+          keyboardType: TextInputType.number,
+          autofocus: true,
+
+        )
+        ,
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child: Text('Guardar'),
+            onPressed: (){
+
+            },
+          )
+        ],
+      );
+    });
+  }
+
   Future<bool> _confirmDialog() async {
     return await showDialog<bool>(
         context: context,
@@ -212,21 +255,21 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-//  Widget _listaPrueba(){
-//    return Container(
-//      child:Expanded(
-//         child: ListView(
-//           children: <Widget>[
-//             ListItemProducto(id: 1,cantidad: 2,codigoBarra: "4334343434",nombre: "Pan dulce",accionPadre: _actualizarBotonBorrar),
-//             ListItemProducto(id: 3,cantidad: 3,codigoBarra: "4334343434",nombre: "Coca-cola",accionPadre: _actualizarBotonBorrar ),
-//             ListItemProducto(id: 2,cantidad: 4,codigoBarra: "4334343434",nombre: "Sal fina" ,accionPadre: _actualizarBotonBorrar),
-//           ],
-//         )
-//
-//      ),
-//
-//    );
-//  }
+  Widget _listaPrueba(){
+    return Container(
+      child:Expanded(
+         child: ListView(
+           children: <Widget>[
+             ListItemProducto(id: 1,cantidad: 2,codigoBarra: "4334343434",nombre: "Pan dulce",accionPadre: _actualizarBotonBorrar),
+             ListItemProducto(id: 3,cantidad: 3,codigoBarra: "4334343434",nombre: "Coca-cola",accionPadre: _actualizarBotonBorrar ),
+             ListItemProducto(id: 2,cantidad: 4,codigoBarra: "4334343434",nombre: "Sal fina" ,accionPadre: _actualizarBotonBorrar),
+           ],
+         )
+
+      ),
+
+    );
+  }
 
   Widget _listaProductos() {
     return  Container(
