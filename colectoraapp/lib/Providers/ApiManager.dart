@@ -7,6 +7,7 @@ class ApiManager {
   String _url = 'http://192.168.0.197:9999';
 
   Future<Producto> getProducto(String codigoBarra) async {
+
     final response = await http.get(
       _url + '/barra/${codigoBarra}',
     );

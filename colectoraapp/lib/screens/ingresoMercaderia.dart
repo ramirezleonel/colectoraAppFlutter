@@ -60,7 +60,8 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         child: Column(
           children: <Widget>[
            _inputCodigoBarra(),
-            _listaPrueba(),
+            _listaProductos(),
+
             _botonGuardarIngreso()
           ],
         ),
@@ -124,7 +125,9 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
       visible: isBotonEditar,
       child: IconButton(icon: Icon(Icons.edit),
         onPressed: (){
-          dialogCantidad(context);
+          dialogCantidad(3,3,context).then((value) => {
+
+          });
         }),
     );
   }
@@ -141,7 +144,11 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     if(val.length == 13){
       setState(() {
         codigoBarra = val ;
-        productos = fetchProducto(codigoBarra);
+        try{
+          productos = fetchProducto(codigoBarra);
+        }catch(e){
+          print("error");
+        }
         textEditingController.clear();
       });
     }
@@ -175,7 +182,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
         )
     );
   }
-   _showDialog(String texto,[bool error])  {
+  Future<void>_showDialog(String texto,[bool error]) async  {
     return showDialog(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -202,7 +209,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
     );
   }
 
-  dialogCantidad(BuildContext context) {
+  Future<String> dialogCantidad(int id,int cantidad,BuildContext context) {
     return showDialog(context: context,
     builder: (context){
       return AlertDialog(
@@ -219,7 +226,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
             elevation: 5.0,
             child: Text('Guardar'),
             onPressed: (){
-
+              Navigator.of(context).pop(controllerDialogCantidad.text.toString());
             },
           )
         ],
@@ -281,6 +288,14 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
                     margin: EdgeInsets.all(20.0),
                     child:Center(child: CircularProgressIndicator())
                 );
+              }else if(snapshot.hasError && productos != null){
+                Future.delayed(Duration.zero, () {
+                  setState(() {
+                    productos = null;
+                    codigoBarra = '';
+                  });
+                  _showDialog("Error en la conexión con la Base de Datos");
+                });
               }
               if(snapshot.hasData && snapshot.connectionState == ConnectionState.done){
                 bool encontrado = false;
@@ -330,6 +345,7 @@ class _IngresoMercaderia extends State<IngresoMercaderia>{
 
   /*consumir api*/
   Future<Producto> fetchProducto(String codBarra) async {
+
     return await api.getProducto(codBarra);
   }
 
